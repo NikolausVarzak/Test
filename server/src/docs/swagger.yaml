@@ -1,0 +1,365 @@
+openapi: 3.0.3
+info:
+  title: Order Management API Specification
+  version: '71'
+  description: API documentation for the Order Management bounded context.
+servers:
+  - url: /api/v1
+    description: Development Server
+tags:
+  - name: OrderManagement
+    description: Operations related to the OrderManagement bounded context.
+paths:
+  /create-order:
+    post:
+      summary: Create Order
+      description: Executes the "Create Order" command. ...
+      operationId: createOrder
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+  /confirm-order:
+    post:
+      summary: Confirm Order
+      description: Executes the "Confirm Order" command. ...
+      operationId: confirmOrder
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmOrderRequest'
+  /deliver-order:
+    post:
+      summary: Deliver Order
+      description: Executes the "Deliver Order" command. ...
+      operationId: deliverOrder
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverOrderRequest'
+  /shopping-cart:
+    get:
+      summary: Shopping Cart
+      description: Retrieves data based on the "Shopping Cart" query. This is a synchronous query operation.
+      operationId: shoppingCart
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShoppingCartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /get-all-orders:
+    get:
+      summary: Get All Orders
+      description: Retrieves data based on the "Get All Orders" query. This is a synchronous query operation.
+      operationId: getAllOrders
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetAllOrdersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /delivery-manifest:
+    get:
+      summary: Delivery Manifest
+      description: Retrieves data based on the "Delivery Manifest" query. This is a synchronous query operation.
+      operationId: deliveryManifest
+      tags:
+        - OrderManagement
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryManifestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An error occurred.
+    Order:
+      type: object
+      description: Represents a Order in the system.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the Order (primary key).
+          example: ORD-78901
+        customerId:
+          type: string
+          description: The customerId of the Order.
+          example: CUST-001
+        shoppingCartId:
+          type: string
+          description: The shoppingCartId of the Order.
+          example: CART-001
+        shippingAddress:
+          type: string
+          description: The shippingAddress of the Order.
+          example: 123 Main St
+        billingAddress:
+          type: string
+          description: The billingAddress of the Order.
+          example: 123 Main St
+        paymentMethodType:
+          type: string
+          description: The paymentMethodType of the Order.
+          example: Credit Card
+        currencyCode:
+          type: string
+          description: The currencyCode of the Order.
+          example: USD
+        orderNotes:
+          type: string
+          description: The orderNotes of the Order.
+          example: Gift wrap needed
+      required:
+        - id
+        - customerId
+        - shoppingCartId
+        - shippingAddress
+        - billingAddress
+        - paymentMethodType
+        - currencyCode
+    CreateOrderRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          example: CUST-001
+        shoppingCartId:
+          type: string
+          example: CART-001
+        shippingAddress:
+          type: string
+          example: 123 Main St
+        billingAddress:
+          type: string
+          example: 123 Main St
+        paymentMethodType:
+          type: string
+          example: Credit Card
+        currencyCode:
+          type: string
+          example: USD
+        orderNotes:
+          type: string
+          example: Gift wrap needed
+      required:
+        - customerId
+        - shoppingCartId
+        - shippingAddress
+        - billingAddress
+        - paymentMethodType
+        - currencyCode
+    ConfirmOrderRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ORD-78901
+        confirmationDate:
+          type: string
+        confirmationChannel:
+          type: string
+        expectedShipmentDate:
+          type: string
+      required:
+        - id
+    DeliverOrderRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ORD-78901
+        shipmentId:
+          type: string
+        deliveryDate:
+          type: string
+        proofOfDelivery:
+          type: string
+        recipientNameConfirmed:
+          type: string
+        courierStaffId:
+          type: string
+      required:
+        - id
+    ShoppingCartResponse:
+      type: object
+      description: Response schema for the Shopping Cart query.
+      properties:
+        id:
+          type: string
+          description: The id of the Order.
+          example: ORD-78901
+        customerId:
+          type: string
+          description: The customerId of the Order.
+          example: CUST-001
+        itemCount:
+          type: string
+          description: The itemCount of the Order.
+        totalAmount:
+          type: string
+          description: The totalAmount of the Order.
+        currencyCode:
+          type: string
+          description: The currencyCode of the Order.
+          example: USD
+        shippingAddress:
+          type: string
+          description: The shippingAddress of the Order.
+          example: 123 Main St
+        billingAddress:
+          type: string
+          description: The billingAddress of the Order.
+          example: 123 Main St
+        paymentMethodType:
+          type: string
+          description: The paymentMethodType of the Order.
+          example: Credit Card
+    GetAllOrdersResponse:
+      type: object
+      description: Response schema for the Get All Orders query.
+      properties:
+        id:
+          type: string
+          description: The id of the Order.
+          example: ORD-78901
+        orderStatus:
+          type: string
+          description: The orderStatus of the Order.
+        stockReservationStatus:
+          type: string
+          description: The stockReservationStatus of the Order.
+        paymentStatus:
+          type: string
+          description: The paymentStatus of the Order.
+        customerId:
+          type: string
+          description: The customerId of the Order.
+          example: CUST-001
+        totalAmount:
+          type: string
+          description: The totalAmount of the Order.
+    DeliveryManifestResponse:
+      type: object
+      description: Response schema for the Delivery Manifest query.
+      properties:
+        id:
+          type: string
+          description: The id of the Order.
+          example: ORD-78901
+        orderId:
+          type: string
+          description: The orderId of the Order.
+        customerName:
+          type: string
+          description: The customerName of the Order.
+        deliveryAddress:
+          type: string
+          description: The deliveryAddress of the Order.
+        recipientContact:
+          type: string
+          description: The recipientContact of the Order.
+        trackingNumber:
+          type: string
+          description: The trackingNumber of the Order.
+        estimatedDeliveryDate:
+          type: string
+          description: The estimatedDeliveryDate of the Order.
+        deliveryInstructions:
+          type: string
+          description: The deliveryInstructions of the Order.
+  parameters:
+    OrderId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the Order.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: 'Bad Request: The server cannot or will not process the request due to something that is perceived to be a client error.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'Not Found: The server can not find the requested resource.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: 'Internal Server Error: The server has encountered a situation it doesn''t know how to handle.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
