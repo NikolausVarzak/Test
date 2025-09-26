@@ -1,29 +1,29 @@
 openapi: 3.0.3
 info:
-  title: Order Management API Specification
-  version: '71'
-  description: API documentation for the Order Management bounded context.
+  title: Compliance Service API Specification
+  version: '95'
+  description: API documentation for the Compliance Service bounded context.
 servers:
   - url: /api/v1
     description: Development Server
 tags:
-  - name: OrderManagement
-    description: Operations related to the OrderManagement bounded context.
+  - name: ComplianceService
+    description: Operations related to the ComplianceService bounded context.
 paths:
-  /create-order:
+  /adopt-regulation:
     post:
-      summary: Create Order
-      description: Executes the "Create Order" command. ...
-      operationId: createOrder
+      summary: Adopt Regulation
+      description: Executes the "Adopt Regulation" command. ...
+      operationId: adoptRegulation
       tags:
-        - OrderManagement
+        - ComplianceService
       responses:
         '200':
           description: 'OK: The resource was updated successfully.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Regulation'
         '400':
           $ref: '#/components/responses/BadRequest'
       requestBody:
@@ -31,21 +31,87 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateOrderRequest'
-  /confirm-order:
+              $ref: '#/components/schemas/AdoptRegulationRequest'
+  /define-policy:
     post:
-      summary: Confirm Order
-      description: Executes the "Confirm Order" command. ...
-      operationId: confirmOrder
+      summary: Define Policy
+      description: Executes the "Define Policy" command. ...
+      operationId: definePolicy
       tags:
-        - OrderManagement
+        - ComplianceService
       responses:
         '200':
           description: 'OK: The resource was updated successfully.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Policy'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefinePolicyRequest'
+  /perform-monitoring-run:
+    post:
+      summary: Perform Monitoring Run
+      description: Executes the "Perform Monitoring Run" command. ...
+      operationId: performMonitoringRun
+      tags:
+        - ComplianceService
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringRun'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerformMonitoringRunRequest'
+  /detect-non-compliance:
+    post:
+      summary: Detect Non-Compliance
+      description: Executes the "Detect Non-Compliance" command. ...
+      operationId: detectNonCompliance
+      tags:
+        - ComplianceService
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Non-ComplianceCase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetectNon-ComplianceRequest'
+  /review-non-compliance-case:
+    post:
+      summary: Review Non-Compliance Case
+      description: Executes the "Review Non-Compliance Case" command. ...
+      operationId: reviewNonComplianceCase
+      tags:
+        - ComplianceService
+      responses:
+        '200':
+          description: 'OK: The resource was updated successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Non-ComplianceCase'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -55,38 +121,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ConfirmOrderRequest'
-  /deliver-order:
-    post:
-      summary: Deliver Order
-      description: Executes the "Deliver Order" command. ...
-      operationId: deliverOrder
-      tags:
-        - OrderManagement
-      responses:
-        '200':
-          description: 'OK: The resource was updated successfully.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeliverOrderRequest'
-  /shopping-cart:
+              $ref: '#/components/schemas/ReviewNon-ComplianceCaseRequest'
+  /get-all-regulations:
     get:
-      summary: Shopping Cart
-      description: Retrieves data based on the "Shopping Cart" query. This is a synchronous query operation.
-      operationId: shoppingCart
+      summary: Get All Regulations
+      description: Retrieves data based on the "Get All Regulations" query. This is a synchronous query operation.
+      operationId: getAllRegulations
       tags:
-        - OrderManagement
+        - ComplianceService
       responses:
         '200':
           description: Successful response
@@ -95,16 +137,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ShoppingCartResponse'
+                  $ref: '#/components/schemas/GetAllRegulationsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-  /get-all-orders:
+  /get-all-policys:
     get:
-      summary: Get All Orders
-      description: Retrieves data based on the "Get All Orders" query. This is a synchronous query operation.
-      operationId: getAllOrders
+      summary: Get All Policys
+      description: Retrieves data based on the "Get All Policys" query. This is a synchronous query operation.
+      operationId: getAllPolicys
       tags:
-        - OrderManagement
+        - ComplianceService
       responses:
         '200':
           description: Successful response
@@ -113,16 +155,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GetAllOrdersResponse'
+                  $ref: '#/components/schemas/GetAllPolicysResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-  /delivery-manifest:
+  /get-all-monitoring-runs:
     get:
-      summary: Delivery Manifest
-      description: Retrieves data based on the "Delivery Manifest" query. This is a synchronous query operation.
-      operationId: deliveryManifest
+      summary: Get All Monitoring Runs
+      description: Retrieves data based on the "Get All Monitoring Runs" query. This is a synchronous query operation.
+      operationId: getAllMonitoringRuns
       tags:
-        - OrderManagement
+        - ComplianceService
       responses:
         '200':
           description: Successful response
@@ -131,7 +173,25 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DeliveryManifestResponse'
+                  $ref: '#/components/schemas/GetAllMonitoringRunsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /get-all-non-compliance-cases:
+    get:
+      summary: Get All Non-Compliance Cases
+      description: Retrieves data based on the "Get All Non-Compliance Cases" query. This is a synchronous query operation.
+      operationId: getAllNonComplianceCases
+      tags:
+        - ComplianceService
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetAllNon-ComplianceCasesResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
 components:
@@ -142,206 +202,395 @@ components:
         message:
           type: string
           example: An error occurred.
-    Order:
+    Regulation:
       type: object
-      description: Represents a Order in the system.
+      description: Represents a Regulation in the system.
       properties:
         id:
           type: string
-          description: Unique identifier for the Order (primary key).
-          example: ORD-78901
-        customerId:
+          description: Unique identifier for the Regulation (primary key).
+          example: reg-001
+        regulationTitle:
           type: string
-          description: The customerId of the Order.
-          example: CUST-001
-        shoppingCartId:
+          description: The regulationTitle of the Regulation.
+          example: GDPR Compliance
+        regulationNumber:
           type: string
-          description: The shoppingCartId of the Order.
-          example: CART-001
-        shippingAddress:
+          description: The regulationNumber of the Regulation.
+          example: EU 2016/679
+        issuingBody:
           type: string
-          description: The shippingAddress of the Order.
-          example: 123 Main St
-        billingAddress:
+          description: The issuingBody of the Regulation.
+          example: European Parliament
+        effectiveDate:
           type: string
-          description: The billingAddress of the Order.
-          example: 123 Main St
-        paymentMethodType:
+          description: The effectiveDate of the Regulation.
+          example: '2018-05-25'
+        description:
           type: string
-          description: The paymentMethodType of the Order.
-          example: Credit Card
-        currencyCode:
-          type: string
-          description: The currencyCode of the Order.
-          example: USD
-        orderNotes:
-          type: string
-          description: The orderNotes of the Order.
-          example: Gift wrap needed
+          description: The description of the Regulation.
+          example: Data Protection Reg
       required:
         - id
-        - customerId
-        - shoppingCartId
-        - shippingAddress
-        - billingAddress
-        - paymentMethodType
-        - currencyCode
-    CreateOrderRequest:
+        - regulationTitle
+        - regulationNumber
+        - issuingBody
+        - effectiveDate
+    Policy:
       type: object
-      properties:
-        customerId:
-          type: string
-          example: CUST-001
-        shoppingCartId:
-          type: string
-          example: CART-001
-        shippingAddress:
-          type: string
-          example: 123 Main St
-        billingAddress:
-          type: string
-          example: 123 Main St
-        paymentMethodType:
-          type: string
-          example: Credit Card
-        currencyCode:
-          type: string
-          example: USD
-        orderNotes:
-          type: string
-          example: Gift wrap needed
-      required:
-        - customerId
-        - shoppingCartId
-        - shippingAddress
-        - billingAddress
-        - paymentMethodType
-        - currencyCode
-    ConfirmOrderRequest:
-      type: object
+      description: Represents a Policy in the system.
       properties:
         id:
           type: string
-          example: ORD-78901
-        confirmationDate:
+          description: Unique identifier for the Policy (primary key).
+          example: pol-A01
+        regulationId:
           type: string
-        confirmationChannel:
+          description: The regulationId of the Policy.
+          example: reg-001
+        policyTitle:
           type: string
-        expectedShipmentDate:
+          description: The policyTitle of the Policy.
+          example: Data Access Policy
+        policyDescription:
           type: string
+          description: The policyDescription of the Policy.
+          example: Defines data access rules
+        effectiveDate:
+          type: string
+          description: The effectiveDate of the Policy.
+          example: '2023-01-15'
+        version:
+          type: string
+          description: The version of the Policy.
+          example: '1.0'
       required:
         - id
-    DeliverOrderRequest:
+        - regulationId
+        - policyTitle
+        - policyDescription
+        - effectiveDate
+        - version
+    MonitoringRun:
       type: object
+      description: Represents a Monitoring Run in the system.
       properties:
         id:
           type: string
-          example: ORD-78901
-        shipmentId:
+          description: Unique identifier for the Monitoring Run (primary key).
+          example: mrun-101
+        monitoringConfigurationId:
           type: string
-        deliveryDate:
+          description: The monitoringConfigurationId of the Monitoring Run.
+          example: config-001
+        monitoringScope:
           type: string
-        proofOfDelivery:
+          description: The monitoringScope of the Monitoring Run.
+          example: All Data
+        runTimestamp:
           type: string
-        recipientNameConfirmed:
+          description: The runTimestamp of the Monitoring Run.
+          example: '2023-10-26T10:00:00Z'
+        triggeredBy:
           type: string
-        courierStaffId:
-          type: string
+          description: The triggeredBy of the Monitoring Run.
+          example: Scheduler
       required:
         - id
-    ShoppingCartResponse:
+        - monitoringConfigurationId
+        - monitoringScope
+        - runTimestamp
+        - triggeredBy
+    Non-ComplianceCase:
       type: object
-      description: Response schema for the Shopping Cart query.
+      description: Represents a Non-Compliance Case in the system.
       properties:
         id:
           type: string
-          description: The id of the Order.
-          example: ORD-78901
-        customerId:
+          description: Unique identifier for the Non-Compliance Case (primary key).
+          example: ncc-001
+        monitoringRunId:
           type: string
-          description: The customerId of the Order.
-          example: CUST-001
-        itemCount:
+          description: The monitoringRunId of the Non-Compliance Case.
+          example: mrun-101
+        detectedPolicyId:
           type: string
-          description: The itemCount of the Order.
-        totalAmount:
+          description: The detectedPolicyId of the Non-Compliance Case.
+          example: pol-A01
+        issueDescription:
           type: string
-          description: The totalAmount of the Order.
-        currencyCode:
+          description: The issueDescription of the Non-Compliance Case.
+          example: Unauthorized data access
+        detectedDate:
           type: string
-          description: The currencyCode of the Order.
-          example: USD
-        shippingAddress:
+          description: The detectedDate of the Non-Compliance Case.
+          example: '2023-10-26'
+        severity:
           type: string
-          description: The shippingAddress of the Order.
-          example: 123 Main St
-        billingAddress:
+          description: The severity of the Non-Compliance Case.
+          example: High
+        reviewOutcome:
           type: string
-          description: The billingAddress of the Order.
-          example: 123 Main St
-        paymentMethodType:
+          description: The reviewOutcome of the Non-Compliance Case.
+          example: Confirmed
+        reviewerId:
           type: string
-          description: The paymentMethodType of the Order.
-          example: Credit Card
-    GetAllOrdersResponse:
+          description: The reviewerId of the Non-Compliance Case.
+          example: user-CO-01
+        reviewDate:
+          type: string
+          description: The reviewDate of the Non-Compliance Case.
+          example: '2023-10-27'
+        reviewComment:
+          type: string
+          description: The reviewComment of the Non-Compliance Case.
+          example: Details verified
+      required:
+        - id
+        - monitoringRunId
+        - detectedPolicyId
+        - issueDescription
+        - detectedDate
+        - severity
+        - reviewOutcome
+        - reviewerId
+        - reviewDate
+    AdoptRegulationRequest:
       type: object
-      description: Response schema for the Get All Orders query.
+      properties:
+        regulationTitle:
+          type: string
+          example: GDPR Compliance
+        regulationNumber:
+          type: string
+          example: EU 2016/679
+        issuingBody:
+          type: string
+          example: European Parliament
+        effectiveDate:
+          type: string
+          example: '2018-05-25'
+      required:
+        - regulationTitle
+        - regulationNumber
+        - issuingBody
+        - effectiveDate
+    DefinePolicyRequest:
+      type: object
+      properties:
+        regulationId:
+          type: string
+          example: reg-001
+        policyTitle:
+          type: string
+          example: Data Access Policy
+        policyDescription:
+          type: string
+          example: Defines data access rules
+        effectiveDate:
+          type: string
+          example: '2023-01-15'
+        version:
+          type: string
+          example: '1.0'
+      required:
+        - regulationId
+        - policyTitle
+        - policyDescription
+        - effectiveDate
+        - version
+    PerformMonitoringRunRequest:
+      type: object
+      properties:
+        monitoringConfigurationId:
+          type: string
+          example: config-001
+        monitoringScope:
+          type: string
+          example: All Data
+        runTimestamp:
+          type: string
+          example: '2023-10-26T10:00:00Z'
+        triggeredBy:
+          type: string
+          example: Scheduler
+      required:
+        - monitoringConfigurationId
+        - monitoringScope
+        - runTimestamp
+        - triggeredBy
+    DetectNon-ComplianceRequest:
+      type: object
+      properties:
+        monitoringRunId:
+          type: string
+          example: mrun-101
+        detectedPolicyId:
+          type: string
+          example: pol-A01
+        issueDescription:
+          type: string
+          example: Unauthorized data access
+        detectedDate:
+          type: string
+          example: '2023-10-26'
+        severity:
+          type: string
+          example: High
+      required:
+        - monitoringRunId
+        - detectedPolicyId
+        - issueDescription
+        - detectedDate
+        - severity
+    ReviewNon-ComplianceCaseRequest:
+      type: object
       properties:
         id:
           type: string
-          description: The id of the Order.
-          example: ORD-78901
-        orderStatus:
+          example: ncc-001
+        reviewComment:
           type: string
-          description: The orderStatus of the Order.
-        stockReservationStatus:
+          example: Details verified
+        reviewOutcome:
           type: string
-          description: The stockReservationStatus of the Order.
-        paymentStatus:
+          example: Confirmed
+        reviewerId:
           type: string
-          description: The paymentStatus of the Order.
-        customerId:
+          example: user-CO-01
+        reviewDate:
           type: string
-          description: The customerId of the Order.
-          example: CUST-001
-        totalAmount:
-          type: string
-          description: The totalAmount of the Order.
-    DeliveryManifestResponse:
+          example: '2023-10-27'
+      required:
+        - id
+        - reviewOutcome
+        - reviewerId
+        - reviewDate
+    GetAllRegulationsResponse:
       type: object
-      description: Response schema for the Delivery Manifest query.
+      description: Response schema for the Get All Regulations query.
       properties:
         id:
           type: string
-          description: The id of the Order.
-          example: ORD-78901
-        orderId:
+          description: The id of the Regulation.
+          example: reg-001
+        regulationTitle:
           type: string
-          description: The orderId of the Order.
-        customerName:
+          description: The regulationTitle of the Regulation.
+          example: GDPR Compliance
+        regulationNumber:
           type: string
-          description: The customerName of the Order.
-        deliveryAddress:
+          description: The regulationNumber of the Regulation.
+          example: EU 2016/679
+        issuingBody:
           type: string
-          description: The deliveryAddress of the Order.
-        recipientContact:
+          description: The issuingBody of the Regulation.
+          example: European Parliament
+        effectiveDate:
           type: string
-          description: The recipientContact of the Order.
-        trackingNumber:
+          description: The effectiveDate of the Regulation.
+          example: '2018-05-25'
+        status:
           type: string
-          description: The trackingNumber of the Order.
-        estimatedDeliveryDate:
+          description: The status of the Regulation.
+    GetAllPolicysResponse:
+      type: object
+      description: Response schema for the Get All Policys query.
+      properties:
+        id:
           type: string
-          description: The estimatedDeliveryDate of the Order.
-        deliveryInstructions:
+          description: The id of the Policy.
+          example: pol-A01
+        policyTitle:
           type: string
-          description: The deliveryInstructions of the Order.
+          description: The policyTitle of the Policy.
+          example: Data Access Policy
+        effectiveDate:
+          type: string
+          description: The effectiveDate of the Policy.
+          example: '2023-01-15'
+        monitoringConfigId:
+          type: string
+          description: The monitoringConfigId of the Policy.
+        status:
+          type: string
+          description: The status of the Policy.
+    GetAllMonitoringRunsResponse:
+      type: object
+      description: Response schema for the Get All Monitoring Runs query.
+      properties:
+        id:
+          type: string
+          description: The id of the Monitoring Run.
+          example: mrun-101
+        runTimestamp:
+          type: string
+          description: The runTimestamp of the Monitoring Run.
+          example: '2023-10-26T10:00:00Z'
+        monitoringScope:
+          type: string
+          description: The monitoringScope of the Monitoring Run.
+          example: All Data
+        status:
+          type: string
+          description: The status of the Monitoring Run.
+        findingsSummary:
+          type: string
+          description: The findingsSummary of the Monitoring Run.
+    GetAllNon-ComplianceCasesResponse:
+      type: object
+      description: Response schema for the Get All Non-Compliance Cases query.
+      properties:
+        id:
+          type: string
+          description: The id of the Non-Compliance Case.
+          example: ncc-001
+        issueDescription:
+          type: string
+          description: The issueDescription of the Non-Compliance Case.
+          example: Unauthorized data access
+        detectedDate:
+          type: string
+          description: The detectedDate of the Non-Compliance Case.
+          example: '2023-10-26'
+        severity:
+          type: string
+          description: The severity of the Non-Compliance Case.
+          example: High
+        detectedPolicyId:
+          type: string
+          description: The detectedPolicyId of the Non-Compliance Case.
+          example: pol-A01
+        status:
+          type: string
+          description: The status of the Non-Compliance Case.
   parameters:
-    OrderId:
+    RegulationId:
       name: id
       in: path
       required: true
-      description: The unique identifier for the Order.
+      description: The unique identifier for the Regulation.
+      schema:
+        type: string
+    PolicyId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the Policy.
+      schema:
+        type: string
+    MonitoringRunId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the Monitoring Run.
+      schema:
+        type: string
+    Non-ComplianceCaseId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier for the Non-Compliance Case.
       schema:
         type: string
   responses:
